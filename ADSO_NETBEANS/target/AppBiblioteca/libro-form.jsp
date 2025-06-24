@@ -8,27 +8,105 @@
     <title>${accion == 'nuevo' ? 'Nuevo' : 'Editar'} Libro - Sistema de Biblioteca ADSO</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .navbar-brand {
-            font-weight: 600;
-        }
-        .content-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-        }
-        .form-card {
-            border-radius: 15px;
-            border: none;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-        .btn-custom {
-            border-radius: 25px;
-            padding: 10px 30px;
-            font-weight: 600;
-        }
-    </style>
+<style>
+    body {
+        background: #f2f5fc;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .content-header {
+        background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+        color: #fff;
+        padding: 3rem 1rem;
+        border-radius: 0 0 40px 40px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+        margin-bottom: 3rem;
+    }
+
+    .form-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        padding: 2rem 2.5rem;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .form-control {
+        border-radius: 15px;
+        padding: 0.75rem 1rem;
+        border: 1px solid #d0d0e0;
+        transition: border 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #a18cd1;
+        box-shadow: 0 0 0 0.25rem rgba(161, 140, 209, 0.25);
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .input-group-text {
+        background-color: #f0f0fa;
+        border: none;
+        border-radius: 15px 0 0 15px;
+    }
+
+    .input-group .form-control {
+        border-radius: 0 15px 15px 0;
+    }
+
+    .btn-custom {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
+        color: white;
+        font-weight: bold;
+        border-radius: 50px;
+        padding: 0.75rem 2rem;
+        transition: background 0.3s ease;
+    }
+
+    .btn-custom:hover {
+        background: linear-gradient(135deg, #5a67d8, #6b46c1);
+        transform: translateY(-2px);
+    }
+
+    .btn-outline-custom {
+        border: 2px solid #764ba2;
+        color: #764ba2;
+        border-radius: 50px;
+        padding: 0.75rem 2rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-custom:hover {
+        background-color: #764ba2;
+        color: white;
+    }
+
+    .form-check-input:checked {
+        background-color: #764ba2;
+        border-color: #764ba2;
+    }
+
+    .form-check-label {
+        font-size: 1rem;
+    }
+
+    .card-header {
+        border-radius: 30px 30px 0 0;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    .alert {
+        border-radius: 15px;
+    }
+</style>
+
 </head>
 <body>
     <!-- Navbar -->
@@ -112,12 +190,12 @@
                                             <i class="fas fa-book me-1 text-primary"></i>
                                             Título <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" class="form-control form-control-lg" 
-                                               id="titulo" name="titulo" 
-                                               value="${libro.titulo}" 
-                                               required maxlength="255"
-                                               placeholder="Ingrese el título del libro">
-                                    </div>
+                                         <input type="text" class="form-control form-control-lg"
+           id="titulo" name="titulo"
+           value="${libro.titulo}"
+           required maxlength="255"
+           placeholder="Ingrese el título del libro">
+</div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">

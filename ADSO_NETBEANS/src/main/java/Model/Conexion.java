@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class Conexion {
     
     // Configuración de la base de datos para XAMPP
-    private static final String URL = "jdbc:mysql://localhost:3306/adso_biblioteca";
+    private static final String URL = "jdbc:mysql://localhost:3306/biblioteca_proyecto";
     private static final String USUARIO = "root";
     private static final String CONTRASENA = "";
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";

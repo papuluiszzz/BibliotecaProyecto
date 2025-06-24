@@ -9,50 +9,204 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-    <style>
-        .navbar-brand {
-            font-weight: 600;
-        }
-        .content-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-        }
-        .stats-card {
-            border-radius: 15px;
-            border: none;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-        }
-        .stats-card:hover {
-            transform: translateY(-5px);
-        }
-        .btn-action {
-            margin: 0 2px;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.875rem;
-        }
-        .table-responsive {
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        .badge-disponible {
-            background-color: #28a745;
-        }
-        .badge-no-disponible {
-            background-color: #dc3545;
-        }
-        .search-section {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-        }
-    </style>
+   <style>
+    :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --danger-gradient: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+        --warning-gradient: linear-gradient(135deg, #f8b500 0%, #ffc837 100%);
+        --shadow-light: 0 8px 20px rgba(0, 0, 0, 0.08);
+        --border-radius: 16px;
+        --transition: all 0.3s ease;
+    }
+
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .navbar-brand {
+        font-weight: 700;
+        font-size: 1.5rem;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .content-header {
+        background: var(--primary-gradient);
+        padding: 3rem 1rem;
+        color: white;
+        margin-bottom: 2.5rem;
+        border-radius: var(--border-radius);
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-light);
+    }
+
+    .stats-card {
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-light);
+        transition: var(--transition);
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .stats-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    }
+
+    .stats-card i {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .table-responsive {
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--shadow-light);
+    }
+
+    .table thead {
+        background-color: rgba(102, 126, 234, 0.1);
+    }
+
+    .table th {
+        font-weight: 600;
+        border: none;
+        padding: 1rem;
+    }
+
+    .table td {
+        border: none;
+        padding: 1rem;
+        vertical-align: middle;
+    }
+
+    .table tbody tr:hover {
+        background-color: rgba(102, 126, 234, 0.05);
+        transform: scale(1.01);
+        transition: var(--transition);
+    }
+
+    .btn-action {
+        margin: 0 0.25rem;
+        padding: 0.5rem;
+        border-radius: 50%;
+        font-size: 0.85rem;
+        width: 40px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+    }
+
+    .btn-action:hover {
+        transform: translateY(-2px) scale(1.1);
+        box-shadow: var(--shadow-light);
+    }
+
+    .btn-outline-success {
+        border: 2px solid #4facfe;
+        color: #4facfe;
+        background: transparent;
+    }
+
+    .btn-outline-success:hover {
+        background: var(--success-gradient);
+        border-color: transparent;
+        color: white;
+    }
+
+    .btn-outline-primary {
+        border: 2px solid #667eea;
+        color: #667eea;
+        background: transparent;
+    }
+
+    .btn-outline-primary:hover {
+        background: var(--primary-gradient);
+        border-color: transparent;
+        color: white;
+    }
+
+    .btn-outline-danger {
+        border: 2px solid #ff6b6b;
+        color: #ff6b6b;
+        background: transparent;
+    }
+
+    .btn-outline-danger:hover {
+        background: var(--danger-gradient);
+        border-color: transparent;
+        color: white;
+    }
+
+    .badge-disponible {
+        background: var(--success-gradient);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+    }
+
+    .badge-no-disponible {
+        background: var(--danger-gradient);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+    }
+
+    .search-section {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        box-shadow: var(--shadow-light);
+        margin-bottom: 2rem;
+    }
+
+    .card-header {
+        background: var(--success-gradient);
+        color: white;
+        padding: 1.5rem;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+    }
+
+    .alert {
+        border-radius: var(--border-radius);
+        padding: 1.25rem 1.5rem;
+        border: none;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .alert-success {
+        background-color: rgba(79, 172, 254, 0.1);
+        color: #4facfe;
+        border-left: 5px solid #4facfe;
+    }
+
+    .alert-danger {
+        background-color: rgba(255, 107, 107, 0.1);
+        color: #ff6b6b;
+        border-left: 5px solid #ff6b6b;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
 </head>
 <body>
     <!-- Navbar -->

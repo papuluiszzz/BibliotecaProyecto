@@ -10,53 +10,654 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .navbar-brand {
-            font-weight: 600;
-        }
-        .content-header {
-            background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
-            color: white;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-        }
-        .prestamo-card {
-            border-radius: 15px;
-            border: none;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
-            margin-bottom: 1.5rem;
-        }
-        .prestamo-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-        .badge-activo {
-            background-color: #fd7e14;
-        }
-        .badge-devuelto {
-            background-color: #28a745;
-        }
-        .badge-vencido {
-            background-color: #dc3545;
-        }
-        .text-vencido {
-            color: #dc3545 !important;
-            font-weight: bold;
-        }
-        .book-icon {
-            font-size: 3rem;
-            color: #17a2b8;
-            margin-bottom: 1rem;
-        }
-        .stats-card {
-            border-radius: 15px;
-            border: none;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-        }
-        .stats-card:hover {
-            transform: translateY(-5px);
-        }
+        :root {
+   --info-gradient: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+   --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+   --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+   --warning-gradient: linear-gradient(135deg, #f8b500 0%, #ffc837 100%);
+   --danger-gradient: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+   --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+   --glass-bg: rgba(255, 255, 255, 0.1);
+   --glass-border: rgba(255, 255, 255, 0.2);
+   --shadow-light: 0 8px 32px rgba(0, 0, 0, 0.1);
+   --shadow-medium: 0 16px 48px rgba(0, 0, 0, 0.15);
+   --shadow-heavy: 0 24px 64px rgba(0, 0, 0, 0.2);
+   --border-radius: 24px;
+   --border-radius-sm: 16px;
+   --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+body {
+   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+   background: linear-gradient(135deg, #a8edea 0%, #fed6e3 50%, #d299c2 100%);
+   min-height: 100vh;
+   line-height: 1.6;
+}
+
+/* Modern Navbar */
+.modern-navbar {
+   background: rgba(255, 255, 255, 0.95);
+   backdrop-filter: blur(20px);
+   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+   box-shadow: var(--shadow-light);
+   position: sticky;
+   top: 0;
+   z-index: 1000;
+}
+
+.navbar-brand {
+   font-weight: 700;
+   font-size: 1.5rem;
+   background: var(--info-gradient);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;
+   background-clip: text;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+   color: #2d3436;
+   font-weight: 500;
+   padding: 0.75rem 1.5rem;
+   border-radius: var(--border-radius-sm);
+   transition: var(--transition);
+   margin: 0 0.25rem;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link.active {
+   background: var(--info-gradient);
+   color: white;
+   transform: translateY(-2px);
+   box-shadow: var(--shadow-light);
+}
+
+.dropdown-menu {
+   background: rgba(255, 255, 255, 0.95);
+   backdrop-filter: blur(20px);
+   border: 1px solid rgba(255, 255, 255, 0.2);
+   border-radius: var(--border-radius-sm);
+   box-shadow: var(--shadow-medium);
+}
+
+.dropdown-item {
+   padding: 0.75rem 1.5rem;
+   border-radius: var(--border-radius-sm);
+   margin: 0.25rem;
+   transition: var(--transition);
+}
+
+.dropdown-item:hover {
+   background: var(--info-gradient);
+   color: white;
+   transform: translateX(5px);
+}
+
+/* Hero Header Section */
+.content-header {
+   background: var(--info-gradient);
+   padding: 4rem 0;
+   margin-bottom: 3rem;
+   position: relative;
+   overflow: hidden;
+}
+
+.content-header::before {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.2)"/><stop offset="100%" style="stop-color:rgba(255,255,255,0)"/></radialGradient></defs><rect x="100" y="100" width="120" height="80" rx="20" fill="url(%23a)"/><rect x="700" y="150" width="150" height="100" rx="25" fill="url(%23a)"/><rect x="300" y="600" width="100" height="120" rx="15" fill="url(%23a)"/><rect x="600" y="700" width="130" height="90" rx="20" fill="url(%23a)"/></svg>');
+   opacity: 0.3;
+   animation: floatBooks 25s ease-in-out infinite;
+}
+
+@keyframes floatBooks {
+   0%, 100% { transform: translateY(0px) rotateZ(0deg); }
+   33% { transform: translateY(-20px) rotateZ(5deg); }
+   66% { transform: translateY(20px) rotateZ(-5deg); }
+}
+
+.header-content {
+   position: relative;
+   z-index: 2;
+   color: white;
+}
+
+.header-title {
+   font-size: 3rem;
+   font-weight: 700;
+   margin-bottom: 1rem;
+   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.header-subtitle {
+   font-size: 1.25rem;
+   font-weight: 300;
+   opacity: 0.9;
+}
+
+/* Modern Buttons */
+.btn {
+   border-radius: var(--border-radius-sm);
+   padding: 0.875rem 2rem;
+   font-weight: 600;
+   text-transform: uppercase;
+   letter-spacing: 0.5px;
+   transition: var(--transition);
+   border: none;
+   position: relative;
+   overflow: hidden;
+}
+
+.btn::before {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: -100%;
+   width: 100%;
+   height: 100%;
+   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+   transition: left 0.5s;
+}
+
+.btn:hover::before {
+   left: 100%;
+}
+
+.btn-light {
+   background: rgba(255, 255, 255, 0.9);
+   color: #2d3436;
+   box-shadow: var(--shadow-light);
+}
+
+.btn-light:hover {
+   background: white;
+   transform: translateY(-3px);
+   box-shadow: var(--shadow-medium);
+}
+
+.btn-primary {
+   background: var(--primary-gradient);
+   box-shadow: var(--shadow-light);
+}
+
+.btn-primary:hover {
+   transform: translateY(-3px);
+   box-shadow: var(--shadow-medium);
+}
+
+.btn-success {
+   background: var(--success-gradient);
+   box-shadow: var(--shadow-light);
+}
+
+.btn-success:hover {
+   transform: translateY(-3px);
+   box-shadow: var(--shadow-medium);
+}
+
+.btn-outline-primary {
+   border: 2px solid #667eea;
+   color: #667eea;
+   background: transparent;
+}
+
+.btn-outline-primary:hover {
+   background: var(--primary-gradient);
+   border-color: transparent;
+   color: white;
+   transform: translateY(-2px);
+}
+
+.btn-outline-success {
+   border: 2px solid #4facfe;
+   color: #4facfe;
+   background: transparent;
+}
+
+.btn-outline-success:hover {
+   background: var(--success-gradient);
+   border-color: transparent;
+   color: white;
+   transform: translateY(-2px);
+}
+
+/* Modern Stats Cards */
+.stats-card {
+   background: rgba(255, 255, 255, 0.9);
+   backdrop-filter: blur(20px);
+   border: 1px solid rgba(255, 255, 255, 0.3);
+   border-radius: var(--border-radius);
+   box-shadow: var(--shadow-light);
+   transition: var(--transition);
+   cursor: pointer;
+   position: relative;
+   overflow: hidden;
+}
+
+.stats-card::before {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   height: 4px;
+   background: var(--info-gradient);
+   transform: scaleX(0);
+   transition: transform 0.3s ease;
+}
+
+.stats-card:hover {
+   transform: translateY(-10px) rotateY(3deg);
+   box-shadow: var(--shadow-heavy);
+   background: rgba(255, 255, 255, 0.95);
+}
+
+.stats-card:hover::before {
+   transform: scaleX(1);
+}
+
+.stats-icon {
+   font-size: 3.5rem;
+   margin-bottom: 1.5rem;
+   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+.stats-number {
+   font-size: 3rem;
+   font-weight: 700;
+   margin-bottom: 0.5rem;
+}
+
+.stats-label {
+   color: #636e72;
+   font-weight: 500;
+}
+
+/* Modern Prestamo Cards */
+.prestamo-card {
+   background: rgba(255, 255, 255, 0.9);
+   backdrop-filter: blur(20px);
+   border: 1px solid rgba(255, 255, 255, 0.3);
+   border-radius: var(--border-radius);
+   box-shadow: var(--shadow-light);
+   transition: var(--transition);
+   margin-bottom: 2rem;
+   position: relative;
+   overflow: hidden;
+}
+
+.prestamo-card::before {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   height: 4px;
+   background: var(--info-gradient);
+   transform: scaleX(0);
+   transition: transform 0.3s ease;
+}
+
+.prestamo-card:hover {
+   transform: translateY(-10px) scale(1.02);
+   box-shadow: var(--shadow-heavy);
+   background: rgba(255, 255, 255, 0.95);
+}
+
+.prestamo-card:hover::before {
+   transform: scaleX(1);
+}
+
+.book-icon {
+   font-size: 4rem;
+   background: var(--info-gradient);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;
+   background-clip: text;
+   margin-bottom: 1.5rem;
+   filter: drop-shadow(0 4px 8px rgba(23, 162, 184, 0.3));
+   animation: bookFloat 3s ease-in-out infinite;
+}
+
+@keyframes bookFloat {
+   0%, 100% { transform: translateY(0px); }
+   50% { transform: translateY(-10px); }
+}
+
+/* Modern Cards */
+.card {
+   background: rgba(255, 255, 255, 0.9);
+   backdrop-filter: blur(20px);
+   border: 1px solid rgba(255, 255, 255, 0.3);
+   border-radius: var(--border-radius);
+   box-shadow: var(--shadow-light);
+   transition: var(--transition);
+}
+
+.card:hover {
+   transform: translateY(-5px);
+   box-shadow: var(--shadow-medium);
+}
+
+.card-header {
+   border-radius: var(--border-radius) var(--border-radius) 0 0;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+   padding: 1.5rem;
+}
+
+.card-header.bg-info {
+   background: var(--info-gradient) !important;
+}
+
+.card-header.bg-success {
+   background: var(--success-gradient) !important;
+}
+
+.card-footer {
+   border-top: 1px solid rgba(255, 255, 255, 0.2);
+   border-radius: 0 0 var(--border-radius) var(--border-radius);
+   padding: 1.5rem;
+}
+
+/* Modern Badges */
+.badge {
+   border-radius: 50px;
+   padding: 0.75rem 1.5rem;
+   font-weight: 600;
+   text-transform: uppercase;
+   letter-spacing: 0.5px;
+   font-size: 0.75rem;
+   box-shadow: var(--shadow-light);
+}
+
+.badge-activo {
+   background: var(--warning-gradient);
+   animation: pulseActive 2s infinite;
+}
+
+.badge-devuelto {
+   background: var(--success-gradient);
+}
+
+.badge-vencido {
+   background: var(--danger-gradient);
+   animation: pulseVencido 1.5s infinite;
+}
+
+@keyframes pulseActive {
+   0%, 100% { transform: scale(1); }
+   50% { transform: scale(1.05); }
+}
+
+@keyframes pulseVencido {
+   0%, 100% { 
+       transform: scale(1);
+       box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4);
+   }
+   50% { 
+       transform: scale(1.1);
+       box-shadow: 0 0 0 10px rgba(255, 107, 107, 0);
+   }
+}
+
+/* Text Vencido */
+.text-vencido {
+   color: #ff6b6b !important;
+   font-weight: bold;
+   animation: blinkText 1.5s infinite;
+}
+
+@keyframes blinkText {
+   0%, 50% { opacity: 1; }
+   51%, 100% { opacity: 0.7; }
+}
+
+/* Modern Alerts */
+.alert {
+   border-radius: var(--border-radius-sm);
+   border: none;
+   padding: 1.25rem 1.5rem;
+   margin-bottom: 1.5rem;
+   backdrop-filter: blur(10px);
+   animation: slideInDown 0.5s ease-out;
+}
+
+@keyframes slideInDown {
+   from {
+       opacity: 0;
+       transform: translateY(-20px);
+   }
+   to {
+       opacity: 1;
+       transform: translateY(0);
+   }
+}
+
+.alert-success {
+   background: rgba(79, 172, 254, 0.15);
+   color: #4facfe;
+   border: 1px solid rgba(79, 172, 254, 0.3);
+}
+
+.alert-danger {
+   background: rgba(255, 107, 107, 0.15);
+   color: #ff6b6b;
+   border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.alert-info {
+   background: rgba(23, 162, 184, 0.15);
+   color: #17a2b8;
+   border: 1px solid rgba(23, 162, 184, 0.3);
+}
+
+/* Modern Modal */
+.modal-content {
+   background: rgba(255, 255, 255, 0.95);
+   backdrop-filter: blur(20px);
+   border: 1px solid rgba(255, 255, 255, 0.3);
+   border-radius: var(--border-radius);
+   box-shadow: var(--shadow-heavy);
+}
+
+.modal-header {
+   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+   padding: 1.5rem;
+}
+
+.modal-body {
+   padding: 2rem;
+}
+
+.modal-footer {
+   border-top: 1px solid rgba(255, 255, 255, 0.2);
+   padding: 1.5rem;
+}
+
+/* Empty State */
+.empty-state {
+   text-align: center;
+   padding: 4rem 2rem;
+   color: #636e72;
+   background: rgba(255, 255, 255, 0.9);
+   backdrop-filter: blur(20px);
+   border-radius: var(--border-radius);
+   margin: 2rem 0;
+}
+
+.empty-state i {
+   font-size: 6rem;
+   margin-bottom: 2rem;
+   background: var(--info-gradient);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;
+   background-clip: text;
+   filter: drop-shadow(0 4px 8px rgba(23, 162, 184, 0.3));
+}
+
+/* Card Animations */
+.prestamo-card {
+   opacity: 0;
+   transform: translateY(30px);
+   animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.prestamo-card:nth-child(1) { animation-delay: 0.1s; }
+.prestamo-card:nth-child(2) { animation-delay: 0.2s; }
+.prestamo-card:nth-child(3) { animation-delay: 0.3s; }
+.prestamo-card:nth-child(4) { animation-delay: 0.4s; }
+.prestamo-card:nth-child(5) { animation-delay: 0.5s; }
+.prestamo-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes fadeInUp {
+   to {
+       opacity: 1;
+       transform: translateY(0);
+   }
+}
+
+/* Hover Effects for Book Icons */
+.book-icon:hover {
+   transform: scale(1.2) rotateY(180deg);
+   transition: var(--transition);
+}
+
+/* Card Title Hover */
+.card-title {
+   transition: var(--transition);
+}
+
+.prestamo-card:hover .card-title {
+   color: #17a2b8;
+   transform: scale(1.05);
+}
+
+/* Button Grid Enhancements */
+.d-grid .btn {
+   margin-bottom: 0.5rem;
+}
+
+.d-grid .btn:last-child {
+   margin-bottom: 0;
+}
+
+/* Info Cards with Gradient Borders */
+.card-header.bg-info {
+   position: relative;
+}
+
+.card-header.bg-info::before {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: var(--info-gradient);
+   border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.card-header.bg-success::before {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: var(--success-gradient);
+   border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+   .header-title {
+       font-size: 2rem;
+   }
+   
+   .prestamo-card:hover {
+       transform: translateY(-5px) scale(1.01);
+   }
+   
+   .book-icon {
+       font-size: 3rem;
+   }
+   
+   .stats-card:hover {
+       transform: translateY(-5px);
+   }
+   
+   .btn-group {
+       flex-direction: column;
+       gap: 0.5rem;
+   }
+}
+
+/* Additional Enhancements */
+.prestamo-card .card-body {
+   position: relative;
+   z-index: 2;
+}
+
+/* Tooltip Enhancements */
+[title] {
+   cursor: help;
+}
+
+/* Loading States */
+.btn.loading {
+   pointer-events: none;
+   position: relative;
+}
+
+.btn.loading::after {
+   content: '';
+   position: absolute;
+   width: 16px;
+   height: 16px;
+   border: 2px solid rgba(255,255,255,.3);
+   border-radius: 50%;
+   border-top-color: #fff;
+   animation: spin 1s ease-in-out infinite;
+   right: 1rem;
+   top: 50%;
+   transform: translateY(-50%);
+}
+
+@keyframes spin {
+   to { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* Enhanced Card Shadows */
+.prestamo-card:hover {
+   box-shadow: 
+       0 20px 40px rgba(23, 162, 184, 0.2),
+       0 10px 20px rgba(0, 0, 0, 0.1),
+       inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+/* Gradient Text Effects */
+.card-title {
+   background: linear-gradient(45deg, #2d3436, #636e72);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;
+   background-clip: text;
+}
+
+.prestamo-card:hover .card-title {
+   background: var(--info-gradient);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;
+   background-clip: text;
+}
     </style>
 </head>
 <body>
