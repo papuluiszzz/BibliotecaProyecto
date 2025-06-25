@@ -167,10 +167,24 @@
             font-size: 1.1rem;
         }
 
-        /* Modern Form Styling */
-        .form-floating {
+        /* Fixed Form Styling - Sin form-floating */
+        .form-group {
             position: relative;
             margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+
+        .form-label i {
+            margin-right: 0.5rem;
+            width: 20px;
         }
 
         .form-control {
@@ -184,6 +198,8 @@
             transition: var(--transition);
             position: relative;
             z-index: 2;
+            width: 100%;
+            font-size: 1rem;
         }
 
         .form-control::placeholder {
@@ -196,19 +212,7 @@
             box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.1);
             color: white;
             transform: translateY(-2px);
-        }
-
-        .form-label {
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .form-label i {
-            margin-right: 0.5rem;
-            width: 20px;
+            outline: none;
         }
 
         /* CAPTCHA Styling */
@@ -289,6 +293,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: var(--shadow-medium);
+            cursor: pointer;
         }
 
         .btn-login::before {
@@ -424,6 +429,13 @@
                 transform: scale(1);
             }
         }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -448,7 +460,7 @@
 
                 <!-- Formulario de login -->
                 <form method="post" action="${pageContext.request.contextPath}/login" class="fade-in-up">
-                    <div class="form-floating">
+                    <div class="form-group">
                         <label for="correo" class="form-label">
                             <i class="fas fa-envelope"></i>Correo Electrónico
                         </label>
@@ -457,7 +469,7 @@
                                placeholder="nombre@ejemplo.com">
                     </div>
 
-                    <div class="form-floating">
+                    <div class="form-group">
                         <label for="contrasena" class="form-label">
                             <i class="fas fa-lock"></i>Contraseña
                         </label>
@@ -466,7 +478,7 @@
                     </div>
 
                     <!-- CAPTCHA -->
-                    <div class="form-floating">
+                    <div class="form-group">
                         <label for="captcha" class="form-label">
                             <i class="fas fa-shield-alt"></i>Código de Verificación
                         </label>
@@ -658,18 +670,6 @@
                 }
             }, 3000);
         });
-
-        // Añadir CSS para el efecto ripple
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple {
-                to {
-                    transform: scale(4);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
 
         // Parallax effect ligero en el fondo
         document.addEventListener('mousemove', function(e) {

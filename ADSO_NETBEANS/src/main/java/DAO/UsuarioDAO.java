@@ -171,28 +171,6 @@ public class UsuarioDAO {
     public UsuarioDTO validarCredenciales(String correo, String contrasena) {
         System.out.println("🔍 UsuarioDAO.validarCredenciales() - Validando: " + correo);
         
-        // Usuarios de prueba para debugging (TEMPORAL)
-        if ("admin@adso.edu.co".equals(correo) && "admin123".equals(contrasena)) {
-            System.out.println("✅ Usuario de prueba ADMIN encontrado");
-            UsuarioDTO admin = new UsuarioDTO();
-            admin.setId(1);
-            admin.setNombre("Administrador");
-            admin.setCorreo("admin@adso.edu.co");
-            admin.setRol("admin");
-            return admin;
-        }
-        
-        if ("usuario@adso.edu.co".equals(correo) && "user123".equals(contrasena)) {
-            System.out.println("✅ Usuario de prueba LECTOR encontrado");
-            UsuarioDTO usuario = new UsuarioDTO();
-            usuario.setId(2);
-            usuario.setNombre("Usuario Lector");
-            usuario.setCorreo("usuario@adso.edu.co");
-            usuario.setRol("usuario");
-            return usuario;
-        }
-        
-        // Validación normal con base de datos
         String sql = "SELECT * FROM usuarios WHERE correo = ?";
         
         try (Connection con = Conexion.getNuevaConexion();
@@ -205,9 +183,45 @@ public class UsuarioDAO {
                 if (rs.next()) {
                     String contrasenaEncriptada = rs.getString("contrasena");
                     System.out.println("🔍 Usuario encontrado en BD, verificando contraseña");
+                    System.out.println("🔍 Contraseña en BD: " + contrasenaEncriptada.substring(0, Math.min(10, contrasenaEncriptada.length())) + "...");
                     
-                    // Verificar la contraseña con BCrypt
-                    if (BCrypt.checkpw(contrasena, contrasenaEncriptada)) {
+                    boolean esValida = false;
+                    
+                    // Verificar si la contraseña está encriptada con BCrypt
+                    if (contrasenaEncriptada.startsWith("$2a$") || 
+                        contrasenaEncriptada.startsWith("$2b$") || 
+                        contrasenaEncriptada.startsWith("$2y$")) {
+                        // Contraseña encriptada con BCrypt
+                        try {
+                            esValida = BCrypt.checkpw(contrasena, contrasenaEncriptada);
+                            System.out.println("🔍 Validando con BCrypt: " + esValida);
+                        } catch (Exception e) {
+                            System.err.println("❌ Error al validar con BCrypt: " + e.getMessage());
+                            esValida = false;
+                        }
+                    } else {
+                        // Contraseña en texto plano
+                        esValida = contrasena.equals(contrasenaEncriptada);
+                        System.out.println("🔍 Validando texto plano: " + esValida);
+                        
+                        // Si coincide, actualizar a BCrypt para mayor seguridad
+                        if (esValida) {
+                            try {
+                                String nuevaContrasenaEncriptada = BCrypt.hashpw(contrasena, BCrypt.gensalt());
+                                String updateSql = "UPDATE usuarios SET contrasena = ? WHERE id = ?";
+                                try (PreparedStatement updatePs = con.prepareStatement(updateSql)) {
+                                    updatePs.setString(1, nuevaContrasenaEncriptada);
+                                    updatePs.setInt(2, rs.getInt("id"));
+                                    updatePs.executeUpdate();
+                                    System.out.println("✅ Contraseña actualizada a BCrypt");
+                                }
+                            } catch (Exception e) {
+                                System.err.println("⚠️ No se pudo actualizar contraseña a BCrypt: " + e.getMessage());
+                            }
+                        }
+                    }
+                    
+                    if (esValida) {
                         System.out.println("✅ Contraseña válida");
                         UsuarioDTO usuario = new UsuarioDTO();
                         usuario.setId(rs.getInt("id"));
@@ -215,19 +229,31 @@ public class UsuarioDAO {
                         usuario.setDocumento(rs.getString("documento"));
                         usuario.setCorreo(rs.getString("correo"));
                         usuario.setTelefono(rs.getString("telefono"));
-                        usuario.setRol(rs.getString("rol"));
+                        
+                        // Normalizar el rol
+                        String rol = rs.getString("rol");
+                        System.out.println("🔍 Rol en BD: " + rol);
+                        
+                        // Mapear roles si es necesario
+                        if ("lector".equals(rol)) {
+                            rol = "usuario";
+                            System.out.println("🔍 Rol convertido a: " + rol);
+                        }
+                        
+                        usuario.setRol(rol);
+                        System.out.println("✅ Usuario autenticado: " + usuario.getNombre() + " (" + usuario.getRol() + ")");
                         
                         return usuario;
                     } else {
-                        System.out.println("❌ Contraseña incorrecta");
+                        System.out.println("❌ Contraseña incorrecta para: " + correo);
                     }
                 } else {
-                    System.out.println("❌ Usuario no encontrado en BD");
+                    System.out.println("❌ Usuario no encontrado en BD: " + correo);
                 }
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error al validar credenciales en BD: " + e.getMessage());
+            System.err.println("❌ Error SQL al validar credenciales: " + e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
             System.err.println("❌ Error general al validar credenciales: " + e.getMessage());
@@ -317,5 +343,67 @@ public class UsuarioDAO {
         }
     }
     
-    
+    /**
+     * Método de diagnóstico para verificar conexión y usuarios (TEMPORAL)
+     */
+    public void diagnosticarConexionYUsuarios() {
+        System.out.println("=== DIAGNÓSTICO DE CONEXIÓN Y USUARIOS ===");
+        
+        try (Connection con = Conexion.getNuevaConexion()) {
+            System.out.println("✅ Conexión a BD exitosa");
+            
+            // Verificar si la tabla usuarios existe
+            String checkTableSql = "SHOW TABLES LIKE 'usuarios'";
+            try (PreparedStatement ps = con.prepareStatement(checkTableSql);
+                 ResultSet rs = ps.executeQuery()) {
+                
+                if (rs.next()) {
+                    System.out.println("✅ Tabla 'usuarios' existe");
+                } else {
+                    System.out.println("❌ Tabla 'usuarios' NO existe");
+                    return;
+                }
+            }
+            
+            // Contar usuarios
+            String countSql = "SELECT COUNT(*) as total FROM usuarios";
+            try (PreparedStatement ps = con.prepareStatement(countSql);
+                 ResultSet rs = ps.executeQuery()) {
+                
+                if (rs.next()) {
+                    int total = rs.getInt("total");
+                    System.out.println("📊 Total de usuarios en BD: " + total);
+                }
+            }
+            
+            // Mostrar usuarios existentes
+            String usersSql = "SELECT id, nombre, correo, rol, " +
+                             "CASE WHEN contrasena LIKE '$2%' THEN 'BCrypt' ELSE 'Texto plano' END as tipo_contrasena " +
+                             "FROM usuarios ORDER BY id";
+            
+            try (PreparedStatement ps = con.prepareStatement(usersSql);
+                 ResultSet rs = ps.executeQuery()) {
+                
+                System.out.println("👥 Usuarios en la base de datos:");
+                System.out.println("ID | Nombre | Correo | Rol | Tipo Contraseña");
+                System.out.println("---|--------|--------|-----|----------------");
+                
+                while (rs.next()) {
+                    System.out.printf("%d | %s | %s | %s | %s%n",
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("correo"),
+                        rs.getString("rol"),
+                        rs.getString("tipo_contrasena")
+                    );
+                }
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("❌ Error de conexión: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        System.out.println("=== FIN DIAGNÓSTICO ===\n");
+    }
 }
